@@ -1,12 +1,27 @@
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const SPEED = 100;
+const MAX_SATS = 75;
+const maxDist = 60;
+const start = Date.now();
 
 const points = [];
 const sats = [];
-const maxDist = 140;
+
+let W, H;
+
+function sizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
 
 async function loadSats() {
   try {
@@ -14,7 +29,10 @@ async function loadSats() {
     const text = await response.text();
     const lines = text.trim().split("\n");
 
-    for (let i = 0; i < lines.length; i += 3) {
+    const total = Math.floor(lines.length / 3);
+    const step = Math.max(1, Math.floor(total / MAX_SATS));
+
+    for (let i = 0; i < lines.length; i += 3 * step) {
       const l1 = lines[i + 1];
       const l2 = lines[i + 2];
       if (!l1 || !l2) continue;
@@ -32,7 +50,7 @@ async function loadSats() {
 }
 
 function updatePositions() {
-  const time = new Date();
+  const time = new Date(start + (Date.now() - start) * SPEED);
   const gmst = satellite.gstime(time);
 
   points.length = 0;
@@ -47,16 +65,17 @@ function updatePositions() {
     if (isNaN(lon) || isNaN(lat)) continue;
 
     points.push({
-      x: (lon + 180) / 360 * canvas.width,
-      y: (90 - lat) / 180 * canvas.height
+      x: (lon + 180) / 360 * W,
+      y: (90 - lat) / 180 * H,
+      name: s.name
     });
   }
 }
 
 function draw() {
   // clear
-  ctx.fillStyle = "#04060b";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(4, 6, 11, 0.9)";
+  ctx.fillRect(0, 0, W, H);
 
   // pass 1 — positions from orbital elements
   updatePositions();
@@ -71,7 +90,7 @@ function draw() {
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < maxDist) {
-        ctx.strokeStyle = "rgba(135, 195, 245, " + (1 - dist / maxDist) * 0.95 + ")";
+        ctx.strokeStyle = "rgba(135, 195, 245, " + (1 - dist / maxDist) * 0.35 + ")";
         ctx.beginPath();
         ctx.moveTo(points[i].x, points[i].y);
         ctx.lineTo(points[j].x, points[j].y);
@@ -81,7 +100,7 @@ function draw() {
   }
 
   // pass 3 — dots
-  ctx.fillStyle = "rgba(205, 232, 255, 0.9)";
+  ctx.fillStyle = "rgba(205, 232, 255, 0.2)";
 
   for (const p of points) {
     ctx.beginPath();
@@ -92,10 +111,8 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+window.addEventListener("resize", sizeCanvas);
 
+sizeCanvas();
 loadSats();
 draw();
