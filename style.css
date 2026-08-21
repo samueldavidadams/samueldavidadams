@@ -1,0 +1,14 @@
+body{
+    margin: 0;
+    background-color:#f1ece0;
+    color: #000000
+}
+
+h1{
+    font-family: Georiga, 'Times New Roman', serif;
+    text-align: center;
+    margin-top: 15vh;
+    font-size: 5rem;
+    font-weight: 400;
+    letter-spacing:0.05em;
+}
