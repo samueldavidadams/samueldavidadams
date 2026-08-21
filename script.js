@@ -5,33 +5,61 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const points = [];
+const sats = [];
+const maxDist = 140;
 
-for (let i = 0; i < 100; i++) {
-  points.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - 0.5) * 0.4,
-    vy: (Math.random() - 0.5) * 0.4
-  });
+async function loadSats() {
+  try {
+    const response = await fetch("/tle.txt");
+    const text = await response.text();
+    const lines = text.trim().split("\n");
+
+    for (let i = 0; i < lines.length; i += 3) {
+      const l1 = lines[i + 1];
+      const l2 = lines[i + 2];
+      if (!l1 || !l2) continue;
+
+      sats.push({
+        name: lines[i].trim(),
+        rec: satellite.twoline2satrec(l1.trim(), l2.trim())
+      });
+    }
+
+    console.log(sats.length + " satellites parsed");
+  } catch (error) {
+    console.error("TLE load failed:", error);
+  }
 }
 
-const maxDist = 140;
+function updatePositions() {
+  const time = new Date();
+  const gmst = satellite.gstime(time);
+
+  points.length = 0;
+
+  for (const s of sats) {
+    const pv = satellite.propagate(s.rec, time);
+    if (!pv || !pv.position) continue;
+
+    const geo = satellite.eciToGeodetic(pv.position, gmst);
+    const lon = satellite.degreesLong(geo.longitude);
+    const lat = satellite.degreesLat(geo.latitude);
+    if (isNaN(lon) || isNaN(lat)) continue;
+
+    points.push({
+      x: (lon + 180) / 360 * canvas.width,
+      y: (90 - lat) / 180 * canvas.height
+    });
+  }
+}
 
 function draw() {
   // clear
   ctx.fillStyle = "#04060b";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // pass 1 — move
-  for (const p of points) {
-    p.x += p.vx;
-    p.y += p.vy;
-
-    if (p.x < 0) p.x = canvas.width;
-    if (p.x > canvas.width) p.x = 0;
-    if (p.y < 0) p.y = canvas.height;
-    if (p.y > canvas.height) p.y = 0;
-  }
+  // pass 1 — positions from orbital elements
+  updatePositions();
 
   // pass 2 — lines
   ctx.lineWidth = 0.8;
@@ -64,9 +92,10 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-draw();
-
 window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
+
+loadSats();
+draw();
