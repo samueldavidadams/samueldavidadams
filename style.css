@@ -1,7 +1,12 @@
 body{
     margin: 0;
-    background-color:#f1ece0;
-    color: #000000;
+    background-color:#04060b;
+    color: #e8eef5;
+}
+    #bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
 }
 
 h1{
@@ -28,11 +33,10 @@ nav a{
     display: inline-block;
     padding: 0.6rem 1.4rem;
     border-radius: 999px;
-    background-color: #e4dcc9;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
     transition: transform 0.25s ease, background-color 0.25s ease;
 }
-
-
 
 nav a:hover{
     transform: translateY(-3px) scale(1.05);
