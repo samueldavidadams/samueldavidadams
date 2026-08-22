@@ -1,7 +1,7 @@
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
-const SPEED = 100;
+const SPEED = 50;
 const MAX_SATS = 75;
 const maxDist = 60;
 const start = Date.now();
