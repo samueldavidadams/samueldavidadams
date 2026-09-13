@@ -59,7 +59,7 @@
 
   <section class="pages">
     <div class="app-cluster">
-      <a class="app-icon app-icon--center" href="reading/" aria-label="Reading" style="--size: 8rem; top: 50%; left: 50%;">
+      <a class="app-icon app-icon--center" href="reading/" aria-label="Reading" style="--size: clamp(5.5rem, 24vw, 8rem); top: 50%; left: 50%;">
         <span class="app-icon-circle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H12v18H6.5A2.5 2.5 0 0 0 4 22.5z"/>
@@ -68,7 +68,7 @@
         </span>
         <span class="app-icon-label">Reading</span>
       </a>
-      <a class="app-icon" href="poetry/" aria-label="Poetry" style="--size: 5rem; top: 12%; left: 50%;">
+      <a class="app-icon" href="poetry/" aria-label="Poetry" style="--size: clamp(3.2rem, 14vw, 5rem); top: 12%; left: 50%;">
         <span class="app-icon-circle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20h9"/>
@@ -77,13 +77,13 @@
         </span>
         <span class="app-icon-label">Poetry</span>
       </a>
-      <a class="app-icon" href="philosophy/" aria-label="Philosophy" style="--size: 5rem; top: 50%; left: 88%;">
+      <a class="app-icon" href="philosophy/" aria-label="Philosophy" style="--size: clamp(3.2rem, 14vw, 5rem); top: 50%; left: 88%;">
         <span class="app-icon-circle">
           <span class="app-icon-glyph">&Phi;</span>
         </span>
         <span class="app-icon-label">Philosophy</span>
       </a>
-      <a class="app-icon" href="projects/" aria-label="Website Projects" style="--size: 5rem; top: 88%; left: 50%;">
+      <a class="app-icon" href="projects/" aria-label="Website Projects" style="--size: clamp(3.2rem, 14vw, 5rem); top: 88%; left: 50%;">
         <span class="app-icon-circle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="16 18 22 12 16 6"/>
@@ -92,11 +92,20 @@
         </span>
         <span class="app-icon-label">Projects</span>
       </a>
-      <a class="app-icon" href="mathematics/" aria-label="Mathematics" style="--size: 5rem; top: 50%; left: 12%;">
+      <a class="app-icon" href="mathematics/" aria-label="Mathematics" style="--size: clamp(3.2rem, 14vw, 5rem); top: 50%; left: 12%;">
         <span class="app-icon-circle">
           <span class="app-icon-glyph">&pi;</span>
         </span>
         <span class="app-icon-label">Mathematics</span>
+      </a>
+      <a class="app-icon" href="links/" aria-label="Links" style="--size: clamp(3.2rem, 14vw, 5rem); top: 22%; left: 78%;">
+        <span class="app-icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+        </span>
+        <span class="app-icon-label">Links</span>
       </a>
     </div>
   </section>
@@ -108,7 +117,6 @@
     document.getElementById("dockGreeting").textContent = greeting;
 
     var dockBar = document.getElementById("dockBar");
-    var hero = document.querySelector(".hero");
     var heroContent = document.querySelector(".hero-content");
     var sentinel = document.getElementById("scroll-sentinel");
 
@@ -122,7 +130,6 @@
       var scrolled = !entries[0].isIntersecting;
       dockBar.classList.toggle("visible", scrolled);
       heroContent.classList.toggle("faded", scrolled);
-      hero.classList.toggle("collapsed", scrolled);
     });
     observer.observe(sentinel);
   </script>

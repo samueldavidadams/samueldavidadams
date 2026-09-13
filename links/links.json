@@ -1,0 +1,5 @@
+[
+  { "title": "Wikipedia", "url": "https://www.wikipedia.org", "note": "Placeholder entry — swap for a real find." },
+  { "title": "Hacker News", "url": "https://news.ycombinator.com", "note": "Placeholder entry with a slightly longer note, to check how wrapping looks when the description runs onto a second line." },
+  { "title": "A link with no note at all", "url": "https://example.com" }
+]

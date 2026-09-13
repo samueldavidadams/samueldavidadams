@@ -65,6 +65,89 @@ article {
   margin-inline: auto;
 }
 
+.page-shell {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: inherit;
+  opacity: 0.7;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  opacity: 1;
+}
+
+.page-intro {
+  max-width: none;
+  margin: 0.5rem 0 0;
+}
+
+.entry-list {
+  list-style: none;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  max-width: 50ch;
+}
+
+.entry-item {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.entry-item a {
+  color: inherit;
+  font-size: 1.15rem;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.entry-item a:hover,
+.entry-item a:focus-visible {
+  opacity: 0.7;
+}
+
+.entry-title {
+  font-size: 1.15rem;
+}
+
+.entry-note {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  color: #00000099;
+}
+
+.entry-empty {
+  margin-top: 2.5rem;
+  color: #00000099;
+}
+
+.verse {
+  max-width: 40ch;
+  margin: 2.5rem 0 0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.verse + .verse {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.verse-title {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: #00000099;
+}
+
 #scroll-sentinel {
   position: absolute;
   top: 0;
@@ -151,21 +234,10 @@ article {
 .hero {
   position: relative;
   z-index: 0;
-  display: grid;
-  grid-template-rows: 1fr;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 5rem 1.5rem 2.5rem;
-  transition: grid-template-rows 0.4s ease;
-}
-
-.hero.collapsed {
-  grid-template-rows: 0fr;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero {
-    transition: none;
-  }
 }
 
 .hero-content {
@@ -174,10 +246,10 @@ article {
   align-items: center;
   gap: 1.5rem;
   opacity: 0;
-  min-height: 0;
   overflow: hidden;
+  max-height: 40rem;
   transform: translateY(0.75rem);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out, max-height 0.4s ease;
 }
 
 .avatar {
@@ -213,6 +285,7 @@ article {
 .hero-content.faded {
   opacity: 0;
   pointer-events: none;
+  max-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -301,6 +374,7 @@ article {
 .app-icon:nth-child(3) { animation-delay: 0.4s; }
 .app-icon:nth-child(4) { animation-delay: 0.6s; }
 .app-icon:nth-child(5) { animation-delay: 0.8s; }
+.app-icon:nth-child(6) { animation-delay: 1s; }
 
 @keyframes bounce {
   0%, 100% {

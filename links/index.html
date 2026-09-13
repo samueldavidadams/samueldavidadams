@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Links — Samuel David Adams</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page-shell">
+    <a class="back-link" href="../">&larr; Back</a>
+
+    <h1>Links</h1>
+    <p class="tagline page-intro">Cool things I've found across the internet.</p>
+
+    <ul class="entry-list" id="linksList"></ul>
+    <p class="entry-empty" id="linksEmpty" hidden>Nothing here yet — check back soon.</p>
+  </div>
+
+  <script>
+    fetch("links.json")
+      .then(function (res) { return res.json(); })
+      .then(function (links) {
+        var list = document.getElementById("linksList");
+        var empty = document.getElementById("linksEmpty");
+        if (!links.length) {
+          empty.hidden = false;
+          return;
+        }
+        links.forEach(function (link) {
+          var li = document.createElement("li");
+          li.className = "entry-item";
+
+          var a = document.createElement("a");
+          a.href = link.url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.textContent = link.title;
+          li.appendChild(a);
+
+          if (link.note) {
+            var note = document.createElement("p");
+            note.className = "entry-note";
+            note.textContent = link.note;
+            li.appendChild(note);
+          }
+
+          list.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>
