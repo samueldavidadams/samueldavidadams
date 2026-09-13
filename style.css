@@ -148,13 +148,6 @@ article {
   color: #00000099;
 }
 
-#scroll-sentinel {
-  position: absolute;
-  top: 0;
-  height: 1px;
-  width: 1px;
-}
-
 .dock-bar {
   position: fixed;
   top: 0;
@@ -231,124 +224,12 @@ article {
   }
 }
 
-.hero {
-  position: relative;
-  z-index: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5rem 1.5rem 2.5rem;
-}
-
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  opacity: 0;
-  overflow: hidden;
-  max-height: 40rem;
-  transform: translateY(0.75rem);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out, max-height 0.4s ease;
-}
-
-.avatar {
-  width: 6.5rem;
-  height: 6.5rem;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1.5px solid currentColor;
-  flex-shrink: 0;
-}
-
-.avatar img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.tagline {
-  max-width: 32ch;
-  margin: 0;
-  text-align: center;
-  font-size: 1.05rem;
-  line-height: 1.5;
-  color: #00000099;
-}
-
-.hero-content.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.hero-content.faded {
-  opacity: 0;
-  pointer-events: none;
-  max-height: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-content {
-    transition: none;
-  }
-}
-
-.social-links {
-  display: flex;
-  justify-content: space-evenly;
-  gap: 3.5rem;
-  width: 100%;
-  max-width: 24rem;
-  opacity: 0;
-  transform: translateY(1rem);
-  animation: slide-in-icons 0.6s ease-out 0.3s forwards;
-}
-
-.social-links a {
-  display: inline-flex;
-  color: inherit;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.social-links a:hover,
-.social-links a:focus-visible {
-  opacity: 1;
-  transform: scale(1.15);
-}
-
-.social-links svg {
-  width: 2.8rem;
-  height: 2.8rem;
-}
-
-@keyframes slide-in-icons {
-  from {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .social-links {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
-
 .pages {
   position: relative;
   z-index: 1;
   display: grid;
   place-items: center;
-  padding: 1.25rem 1.5rem 5rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 7rem 1.5rem 5rem;
 }
 
 .app-cluster {
