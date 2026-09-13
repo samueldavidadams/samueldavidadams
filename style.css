@@ -52,13 +52,12 @@ body {
 
 h1 {
   font-family: "IBM Plex Sans Thai", sans-serif;
-  font-size: clamp(4rem, 14vw, 8rem);
+  font-size: clamp(2.25rem, 8vw, 4.5rem);
   font-weight: 400;
+  line-height: 1;
   text-align: center;
   letter-spacing: 0;
-  margin: 3rem 0;
-  transform-origin: center center;
-  animation: reveal 1.8s ease-out forwards;
+  margin: 3rem 0 0;
 }
 
 article {
@@ -66,27 +65,9 @@ article {
   margin-inline: auto;
 }
 
-@keyframes reveal {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  55% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.5) translateY(-32vh);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  h1 {
-    animation: none;
-    transform: scale(0.5) translateY(-32vh);
-  }
-}
 .hero {
+  position: relative;
+  z-index: 0;
   min-height: 100svh;
   display: grid;
   place-items: center;
@@ -96,39 +77,153 @@ article {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 3rem;
+  animation: reveal 0.7s ease-out forwards;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-40vh) translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-40vh) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-content {
+    animation: none;
+    opacity: 1;
+    transform: translateY(-40vh);
+  }
 }
 
 .social-links {
   display: flex;
-  gap: 1.5rem;
+  justify-content: space-evenly;
+  gap: 3.5rem;
+  width: 100%;
+  max-width: 24rem;
   opacity: 0;
-  animation: fade-in-icons 0.8s ease-out 1.6s forwards;
+  transform: translateY(1rem);
+  animation: slide-in-icons 0.6s ease-out 0.3s forwards;
 }
 
 .social-links a {
   display: inline-flex;
   color: inherit;
   opacity: 0.7;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .social-links a:hover,
 .social-links a:focus-visible {
   opacity: 1;
+  transform: scale(1.15);
 }
 
 .social-links svg {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2.8rem;
+  height: 2.8rem;
 }
 
-@keyframes fade-in-icons {
-  to { opacity: 1; }
+@keyframes slide-in-icons {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .social-links {
     animation: none;
     opacity: 1;
+    transform: none;
   }
+}
+
+.pages {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  margin-top: -70svh;
+  display: grid;
+  place-items: center;
+}
+
+.app-cluster {
+  position: relative;
+  width: min(90vw, 34rem);
+  aspect-ratio: 1 / 1;
+}
+
+.app-icon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: inherit;
+  text-decoration: none;
+  animation: bounce 2.4s ease-in-out infinite;
+}
+
+.app-icon:nth-child(1) { animation-delay: 0s; }
+.app-icon:nth-child(2) { animation-delay: 0.2s; }
+.app-icon:nth-child(3) { animation-delay: 0.4s; }
+.app-icon:nth-child(4) { animation-delay: 0.6s; }
+.app-icon:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-0.4rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-icon {
+    animation: none;
+  }
+}
+
+.app-icon-circle {
+  width: var(--size, 5rem);
+  height: var(--size, 5rem);
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.app-icon:hover .app-icon-circle,
+.app-icon:focus-visible .app-icon-circle {
+  transform: scale(1.12);
+}
+
+.app-icon-circle svg {
+  width: 42%;
+  height: 42%;
+}
+
+.app-icon-glyph {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: calc(var(--size, 5rem) * 0.42);
+  line-height: 1;
+}
+
+.app-icon-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
 }
