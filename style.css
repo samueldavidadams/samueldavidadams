@@ -6,6 +6,23 @@ body {
   font-family: "IBM Plex Sans Thai", sans-serif;
   font-size: 1.125rem;
   line-height: 1.65;
+  opacity: 0;
+  transition: opacity 0.25s ease, background-color 1s ease;
+}
+
+body.page-loaded {
+  opacity: 1;
+}
+
+body.page-leaving {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    opacity: 1;
+    transition: background-color 1s ease;
+  }
 }
 
 .ibm-plex-sans-thai-thin {
@@ -232,30 +249,41 @@ article {
   padding: 7rem 1.5rem 5rem;
 }
 
-.app-cluster {
-  position: relative;
-  width: min(100%, 34rem);
-  aspect-ratio: 1 / 1;
-}
-
-.app-icon {
-  position: absolute;
-  transform: translate(-50%, -50%);
+.hive {
+  --hex-w: clamp(5.5rem, 24vw, 8.5rem);
+  --hex-h: calc(var(--hex-w) * 1.1547);
+  width: min(100%, 46rem);
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  color: inherit;
-  text-decoration: none;
-  animation: bounce 2.4s ease-in-out infinite;
 }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translate(-50%, -50%) translateY(0);
+.hive-row {
+  display: flex;
+  justify-content: center;
+  margin-top: calc(var(--hex-h) * -0.25);
+}
+
+.hive-row:first-child {
+  margin-top: 0;
+}
+
+.app-icon {
+  display: flex;
+  color: inherit;
+  text-decoration: none;
+  animation: build-in 0.5s ease-out backwards;
+}
+
+@keyframes build-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
   }
-  50% {
-    transform: translate(-50%, -50%) translateY(-0.4rem);
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -265,34 +293,90 @@ article {
   }
 }
 
-.app-icon-circle {
-  width: var(--size, 5rem);
-  height: var(--size, 5rem);
-  border-radius: 50%;
-  border: 1.5px solid currentColor;
+.app-icon-hex {
+  position: relative;
+  width: var(--hex-w);
+  height: var(--hex-h);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: currentColor;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  gap: 0.3rem;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+  text-align: center;
 }
 
-.app-icon:hover .app-icon-circle,
-.app-icon:focus-visible .app-icon-circle {
-  transform: scale(1.12);
+.hive-row {
+  perspective: 600px;
 }
 
-.app-icon-circle svg {
-  width: 42%;
-  height: 42%;
+.app-icon-hex.flipping {
+  animation: hex-flip 1s ease-in-out;
+}
+
+@keyframes hex-flip {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-icon-hex.flipping {
+    animation: none;
+  }
+}
+
+.app-icon-hex::before {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: #fffbf1;
+  transition: background 0.2s ease;
+}
+
+.app-icon:hover .app-icon-hex::before,
+.app-icon:focus-visible .app-icon-hex::before {
+  background: transparent;
+}
+
+.app-icon-hex svg,
+.app-icon-hex .app-icon-glyph,
+.app-icon-hex .app-icon-label {
+  position: relative;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.app-icon:hover .app-icon-hex svg,
+.app-icon:hover .app-icon-hex .app-icon-glyph,
+.app-icon:hover .app-icon-hex .app-icon-label,
+.app-icon:focus-visible .app-icon-hex svg,
+.app-icon:focus-visible .app-icon-hex .app-icon-glyph,
+.app-icon:focus-visible .app-icon-hex .app-icon-label {
+  color: #fffbf1;
+}
+
+.app-icon-hex svg {
+  width: 26%;
+  height: 26%;
+  flex-shrink: 0;
 }
 
 .app-icon-glyph {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: calc(var(--size, 5rem) * 0.42);
+  font-size: calc(var(--hex-w) * 0.26);
   line-height: 1;
 }
 
 .app-icon-label {
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
+  font-size: 0.65rem;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
 }
