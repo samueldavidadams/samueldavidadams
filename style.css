@@ -368,6 +368,43 @@ article {
   color: #fffbf1;
 }
 
+/* Reusable loading indicator — a thin-outline hex that spins in place.
+   Usage: <span class="hex-spinner" role="status" aria-label="Loading"></span>
+   Resize with style="--spinner-size: 2rem;" if needed. */
+.hex-spinner {
+  --spinner-size: 2.5rem;
+  position: relative;
+  display: inline-block;
+  width: var(--spinner-size);
+  height: calc(var(--spinner-size) * 1.1547);
+  perspective: 400px;
+}
+
+.hex-spinner::before,
+.hex-spinner::after {
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  animation: hex-flip 1.2s linear infinite;
+}
+
+.hex-spinner::before {
+  inset: 0;
+  background: currentColor;
+}
+
+.hex-spinner::after {
+  inset: 1.5px;
+  background: #fffbf1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-spinner::before,
+  .hex-spinner::after {
+    animation: none;
+  }
+}
+
 .app-icon-hex svg {
   width: 26%;
   height: 26%;

@@ -17,6 +17,9 @@
     <h1>Links</h1>
     <p class="tagline page-intro">Cool things I've found across the internet.</p>
 
+    <div class="entry-loading" id="linksLoading" style="margin-top: 2.5rem;">
+      <span class="hex-spinner" style="--spinner-size: 2rem;" role="status" aria-label="Loading"></span>
+    </div>
     <ul class="entry-list" id="linksList"></ul>
     <p class="entry-empty" id="linksEmpty" hidden>Nothing here yet — check back soon.</p>
   </div>
@@ -26,6 +29,7 @@
     fetch("links.json")
       .then(function (res) { return res.json(); })
       .then(function (links) {
+        document.getElementById("linksLoading").remove();
         var list = document.getElementById("linksList");
         var empty = document.getElementById("linksEmpty");
         if (!links.length) {
@@ -52,6 +56,11 @@
 
           list.appendChild(li);
         });
+      })
+      .catch(function () {
+        var loading = document.getElementById("linksLoading");
+        if (loading) loading.remove();
+        document.getElementById("linksEmpty").hidden = false;
       });
   </script>
 </body>
