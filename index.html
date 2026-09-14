@@ -42,7 +42,7 @@
         </span>
         <span class="app-icon-label">Reading</span>
       </a>
-      <a class="app-icon" href="poetry/" aria-label="Poetry" style="--size: clamp(3.2rem, 14vw, 5rem); top: 12%; left: 50%;">
+      <a class="app-icon" href="poetry/" aria-label="Poetry" style="--size: clamp(3.2rem, 14vw, 5rem);">
         <span class="app-icon-circle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20h9"/>
@@ -51,13 +51,13 @@
         </span>
         <span class="app-icon-label">Poetry</span>
       </a>
-      <a class="app-icon" href="philosophy/" aria-label="Philosophy" style="--size: clamp(3.2rem, 14vw, 5rem); top: 50%; left: 88%;">
+      <a class="app-icon" href="philosophy/" aria-label="Philosophy" style="--size: clamp(3.2rem, 14vw, 5rem);">
         <span class="app-icon-circle">
           <span class="app-icon-glyph">&Phi;</span>
         </span>
         <span class="app-icon-label">Philosophy</span>
       </a>
-      <a class="app-icon" href="projects/" aria-label="Website Projects" style="--size: clamp(3.2rem, 14vw, 5rem); top: 88%; left: 50%;">
+      <a class="app-icon" href="projects/" aria-label="Website Projects" style="--size: clamp(3.2rem, 14vw, 5rem);">
         <span class="app-icon-circle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="16 18 22 12 16 6"/>
@@ -66,13 +66,13 @@
         </span>
         <span class="app-icon-label">Projects</span>
       </a>
-      <a class="app-icon" href="mathematics/" aria-label="Mathematics" style="--size: clamp(3.2rem, 14vw, 5rem); top: 50%; left: 12%;">
+      <a class="app-icon" href="mathematics/" aria-label="Mathematics" style="--size: clamp(3.2rem, 14vw, 5rem);">
         <span class="app-icon-circle">
           <span class="app-icon-glyph">&pi;</span>
         </span>
         <span class="app-icon-label">Mathematics</span>
       </a>
-      <a class="app-icon" href="links/" aria-label="Links" style="--size: clamp(3.2rem, 14vw, 5rem); top: 22%; left: 78%;">
+      <a class="app-icon" href="links/" aria-label="Links" style="--size: clamp(3.2rem, 14vw, 5rem);">
         <span class="app-icon-circle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
@@ -80,6 +80,24 @@
           </svg>
         </span>
         <span class="app-icon-label">Links</span>
+      </a>
+      <a class="app-icon" href="cryptocurrency/" aria-label="Cryptocurrency" style="--size: clamp(3.2rem, 14vw, 5rem);">
+        <span class="app-icon-circle">
+          <span class="app-icon-glyph">&#8383;</span>
+        </span>
+        <span class="app-icon-label">Cryptocurrency</span>
+      </a>
+      <a class="app-icon" href="exercise/" aria-label="Exercise" style="--size: clamp(3.2rem, 14vw, 5rem);">
+        <span class="app-icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="4" cy="12" r="2"/>
+            <circle cx="20" cy="12" r="2"/>
+            <line x1="6" y1="12" x2="18" y2="12"/>
+            <line x1="9" y1="9" x2="9" y2="15"/>
+            <line x1="15" y1="9" x2="15" y2="15"/>
+          </svg>
+        </span>
+        <span class="app-icon-label">Exercise</span>
       </a>
     </div>
   </section>
@@ -94,6 +112,17 @@
       requestAnimationFrame(function () {
         dockBar.classList.add("visible");
       });
+    });
+
+    var satellites = Array.prototype.slice.call(
+      document.querySelectorAll(".app-icon:not(.app-icon--center)")
+    );
+    var radius = 38;
+    satellites.forEach(function (el, i) {
+      var angle = ((360 / satellites.length) * i - 90) * (Math.PI / 180);
+      el.style.top = (50 + radius * Math.sin(angle)) + "%";
+      el.style.left = (50 + radius * Math.cos(angle)) + "%";
+      el.style.animationDelay = (i * 0.2) + "s";
     });
   </script>
 </body>
