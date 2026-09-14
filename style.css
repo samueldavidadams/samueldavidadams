@@ -234,7 +234,7 @@ article {
 
 .app-cluster {
   position: relative;
-  width: min(90vw, 34rem);
+  width: min(100%, 34rem);
   aspect-ratio: 1 / 1;
 }
 
