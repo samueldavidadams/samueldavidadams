@@ -121,22 +121,45 @@
     function layoutHive() {
       // approximates the CSS clamp(5.5rem, 24vw, 8.5rem) used for --hex-w
       var hexW = Math.min(Math.max(88, window.innerWidth * 0.24), 136);
+      var hexH = hexW * 1.1547;
+      var rowStep = hexH * 0.75;
       var containerWidth = hive.clientWidth || hexW;
       var cols = Math.max(1, Math.floor(containerWidth / hexW));
 
-      hive.innerHTML = "";
+      // compute every hex's exact (x, y) in an explicit coordinate system —
+      // nothing here depends on flexbox centering or how many items end up
+      // in the last row, so there is no case where two hexes' computed
+      // positions can collide.
+      var placements = [];
       var i = 0;
       var rowIndex = 0;
       while (i < icons.length) {
-        var count = rowIndex % 2 === 0 ? cols : Math.max(1, cols - 1);
-        var row = document.createElement("div");
-        row.className = "hive-row";
+        var isOffset = rowIndex % 2 === 1;
+        var count = isOffset ? Math.max(1, cols - 1) : cols;
+        var rowOffsetX = isOffset ? hexW / 2 : 0;
         for (var c = 0; c < count && i < icons.length; c++, i++) {
-          row.appendChild(icons[i]);
+          placements.push({
+            el: icons[i],
+            x: rowOffsetX + c * hexW,
+            y: rowIndex * rowStep,
+          });
         }
-        hive.appendChild(row);
         rowIndex++;
       }
+
+      if (!placements.length) return;
+
+      var contentWidth = cols * hexW;
+      var xOffset = (containerWidth - contentWidth) / 2;
+      var hiveHeight = (rowIndex - 1) * rowStep + hexH;
+
+      hive.style.height = hiveHeight + "px";
+      placements.forEach(function (p) {
+        p.el.style.left = (p.x + xOffset) + "px";
+        p.el.style.top = p.y + "px";
+        p.el.style.width = hexW + "px";
+        hive.appendChild(p.el);
+      });
     }
 
     layoutHive();

@@ -18,6 +18,13 @@
     });
   });
 
+  // when a page is restored from the back/forward cache (e.g. iOS swipe-back),
+  // it comes back exactly as it was frozen mid-fade-out — force it visible again
+  window.addEventListener("pageshow", function () {
+    document.body.classList.remove("page-leaving");
+    document.body.classList.add("page-loaded");
+  });
+
   // fade out before navigating to another page on this site
   document.addEventListener("click", function (e) {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {

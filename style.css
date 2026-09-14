@@ -252,24 +252,16 @@ article {
 .hive {
   --hex-w: clamp(5.5rem, 24vw, 8.5rem);
   --hex-h: calc(var(--hex-w) * 1.1547);
+  position: relative;
   width: min(100%, 46rem);
   margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hive-row {
-  display: flex;
-  justify-content: center;
-  margin-top: calc(var(--hex-h) * -0.25);
-}
-
-.hive-row:first-child {
-  margin-top: 0;
+  perspective: 600px;
 }
 
 .app-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   color: inherit;
   text-decoration: none;
@@ -307,10 +299,6 @@ article {
   padding: 0 0.5rem;
   box-sizing: border-box;
   text-align: center;
-}
-
-.hive-row {
-  perspective: 600px;
 }
 
 .app-icon-hex.flipping {
