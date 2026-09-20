@@ -32,71 +32,72 @@
   // each populated with any number of .app-icon children. Positions are
   // computed as an explicit (x, y) coordinate system rather than inferred
   // from flexbox centering, so there is no icon count/screen width
-  // combination that can produce overlapping hexes.
-  var hives = Array.prototype.slice.call(document.querySelectorAll(".hive"));
-  if (hives.length) {
-    var hiveIconSets = hives.map(function (hive) {
+  // combination that can produce overlapping hexes. Re-queries the DOM
+  // fresh on every call (rather than capturing element lists once), so
+  // pages that add hexes dynamically (e.g. after a fetch) can just call
+  // window.layoutHives() again once their content is in place.
+  var layoutHive = function (hive, icons) {
+    // approximates the CSS clamp(5.5rem, 24vw, 8.5rem) used for --hex-w
+    var hexW = Math.min(Math.max(88, window.innerWidth * 0.24), 136);
+    var hexH = hexW * 1.1547;
+    var rowStep = hexH * 0.75;
+    var containerWidth = hive.clientWidth || hexW;
+    var cols = Math.max(1, Math.floor(containerWidth / hexW));
+
+    var placements = [];
+    var i = 0;
+    var rowIndex = 0;
+    while (i < icons.length) {
+      var isOffset = rowIndex % 2 === 1;
+      var count = isOffset ? Math.max(1, cols - 1) : cols;
+      var rowOffsetX = isOffset ? hexW / 2 : 0;
+      for (var c = 0; c < count && i < icons.length; c++, i++) {
+        placements.push({
+          el: icons[i],
+          x: rowOffsetX + c * hexW,
+          y: rowIndex * rowStep,
+        });
+      }
+      rowIndex++;
+    }
+
+    if (!placements.length) return;
+
+    var contentWidth = cols * hexW;
+    var xOffset = (containerWidth - contentWidth) / 2;
+    var hiveHeight = (rowIndex - 1) * rowStep + hexH;
+
+    hive.style.height = hiveHeight + "px";
+    placements.forEach(function (p) {
+      p.el.style.left = (p.x + xOffset) + "px";
+      p.el.style.top = p.y + "px";
+      p.el.style.width = hexW + "px";
+      hive.appendChild(p.el);
+    });
+  };
+
+  var layoutAllHives = function (resetAnimation) {
+    var hiveEls = Array.prototype.slice.call(document.querySelectorAll(".hive"));
+    hiveEls.forEach(function (hive) {
       var icons = Array.prototype.slice.call(hive.children);
       icons.forEach(function (el, i) {
-        el.style.animationDelay = (i * 0.15) + "s";
-      });
-      return icons;
-    });
-
-    var layoutHive = function (hive, icons) {
-      // approximates the CSS clamp(5.5rem, 24vw, 8.5rem) used for --hex-w
-      var hexW = Math.min(Math.max(88, window.innerWidth * 0.24), 136);
-      var hexH = hexW * 1.1547;
-      var rowStep = hexH * 0.75;
-      var containerWidth = hive.clientWidth || hexW;
-      var cols = Math.max(1, Math.floor(containerWidth / hexW));
-
-      var placements = [];
-      var i = 0;
-      var rowIndex = 0;
-      while (i < icons.length) {
-        var isOffset = rowIndex % 2 === 1;
-        var count = isOffset ? Math.max(1, cols - 1) : cols;
-        var rowOffsetX = isOffset ? hexW / 2 : 0;
-        for (var c = 0; c < count && i < icons.length; c++, i++) {
-          placements.push({
-            el: icons[i],
-            x: rowOffsetX + c * hexW,
-            y: rowIndex * rowStep,
-          });
+        if (resetAnimation) {
+          el.style.animation = "none";
+        } else if (!el.dataset.staggered) {
+          el.style.animationDelay = (i * 0.15) + "s";
+          el.dataset.staggered = "true";
         }
-        rowIndex++;
-      }
-
-      if (!placements.length) return;
-
-      var contentWidth = cols * hexW;
-      var xOffset = (containerWidth - contentWidth) / 2;
-      var hiveHeight = (rowIndex - 1) * rowStep + hexH;
-
-      hive.style.height = hiveHeight + "px";
-      placements.forEach(function (p) {
-        p.el.style.left = (p.x + xOffset) + "px";
-        p.el.style.top = p.y + "px";
-        p.el.style.width = hexW + "px";
-        hive.appendChild(p.el);
       });
-    };
+      layoutHive(hive, icons);
+    });
+  };
 
-    var layoutAllHives = function () {
-      hives.forEach(function (hive, idx) {
-        layoutHive(hive, hiveIconSets[idx]);
-      });
-    };
+  window.layoutHives = layoutAllHives;
 
+  if (document.querySelector(".hive")) {
     layoutAllHives();
     window.addEventListener("resize", function () {
-      hiveIconSets.forEach(function (icons) {
-        icons.forEach(function (el) {
-          el.style.animation = "none";
-        });
-      });
-      layoutAllHives();
+      layoutAllHives(true);
     });
 
     if (!reduceMotion) {

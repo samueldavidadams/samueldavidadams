@@ -20,7 +20,7 @@
     <div class="entry-loading" id="linksLoading" style="margin-top: 2.5rem;">
       <span class="hex-spinner" style="--spinner-size: 2rem;" role="status" aria-label="Loading"></span>
     </div>
-    <ul class="entry-list" id="linksList"></ul>
+    <div class="hive" id="linksHive"></div>
     <p class="entry-empty" id="linksEmpty" hidden>Nothing here yet — check back soon.</p>
   </div>
 
@@ -30,32 +30,35 @@
       .then(function (res) { return res.json(); })
       .then(function (links) {
         document.getElementById("linksLoading").remove();
-        var list = document.getElementById("linksList");
+        var hive = document.getElementById("linksHive");
         var empty = document.getElementById("linksEmpty");
         if (!links.length) {
           empty.hidden = false;
           return;
         }
         links.forEach(function (link) {
-          var li = document.createElement("li");
-          li.className = "entry-item";
-
           var a = document.createElement("a");
+          a.className = "app-icon";
           a.href = link.url;
           a.target = "_blank";
           a.rel = "noopener noreferrer";
-          a.textContent = link.title;
-          li.appendChild(a);
+          a.setAttribute("aria-label", link.title);
+          if (link.note) a.title = link.note;
 
-          if (link.note) {
-            var note = document.createElement("p");
-            note.className = "entry-note";
-            note.textContent = link.note;
-            li.appendChild(note);
-          }
+          a.innerHTML =
+            '<span class="app-icon-hex">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>' +
+            '<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>' +
+            "</svg>" +
+            '<span class="app-icon-label"></span>' +
+            "</span>";
+          a.querySelector(".app-icon-label").textContent = link.title;
 
-          list.appendChild(li);
+          hive.appendChild(a);
         });
+
+        if (window.layoutHives) window.layoutHives();
       })
       .catch(function () {
         var loading = document.getElementById("linksLoading");
