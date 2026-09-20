@@ -100,94 +100,20 @@
           <span class="app-icon-label">Exercise</span>
         </span>
       </a>
+      <a class="app-icon" href="moments/" aria-label="Moments">
+        <span class="app-icon-hex">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2h12"/>
+            <path d="M6 22h12"/>
+            <path d="M6 2c0 5 4 7 4 10s-4 5-4 10"/>
+            <path d="M18 2c0 5-4 7-4 10s4 5 4 10"/>
+          </svg>
+          <span class="app-icon-label">Moments</span>
+        </span>
+      </a>
     </div>
   </section>
 
   <script src="/script.js"></script>
-  <script>
-    var dockBar = document.getElementById("dockBar");
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        dockBar.classList.add("visible");
-      });
-    });
-
-    var hive = document.querySelector(".hive");
-    var icons = Array.prototype.slice.call(hive.children);
-    icons.forEach(function (el, i) {
-      el.style.animationDelay = (i * 0.15) + "s";
-    });
-
-    function layoutHive() {
-      // approximates the CSS clamp(5.5rem, 24vw, 8.5rem) used for --hex-w
-      var hexW = Math.min(Math.max(88, window.innerWidth * 0.24), 136);
-      var hexH = hexW * 1.1547;
-      var rowStep = hexH * 0.75;
-      var containerWidth = hive.clientWidth || hexW;
-      var cols = Math.max(1, Math.floor(containerWidth / hexW));
-
-      // compute every hex's exact (x, y) in an explicit coordinate system —
-      // nothing here depends on flexbox centering or how many items end up
-      // in the last row, so there is no case where two hexes' computed
-      // positions can collide.
-      var placements = [];
-      var i = 0;
-      var rowIndex = 0;
-      while (i < icons.length) {
-        var isOffset = rowIndex % 2 === 1;
-        var count = isOffset ? Math.max(1, cols - 1) : cols;
-        var rowOffsetX = isOffset ? hexW / 2 : 0;
-        for (var c = 0; c < count && i < icons.length; c++, i++) {
-          placements.push({
-            el: icons[i],
-            x: rowOffsetX + c * hexW,
-            y: rowIndex * rowStep,
-          });
-        }
-        rowIndex++;
-      }
-
-      if (!placements.length) return;
-
-      var contentWidth = cols * hexW;
-      var xOffset = (containerWidth - contentWidth) / 2;
-      var hiveHeight = (rowIndex - 1) * rowStep + hexH;
-
-      hive.style.height = hiveHeight + "px";
-      placements.forEach(function (p) {
-        p.el.style.left = (p.x + xOffset) + "px";
-        p.el.style.top = p.y + "px";
-        p.el.style.width = hexW + "px";
-        hive.appendChild(p.el);
-      });
-    }
-
-    layoutHive();
-    window.addEventListener("resize", function () {
-      icons.forEach(function (el) {
-        el.style.animation = "none";
-      });
-      layoutHive();
-    });
-
-    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduceMotion) {
-      (function scheduleFlip() {
-        var delay = 4000 + Math.random() * 6000;
-        setTimeout(function () {
-          var hexes = hive.querySelectorAll(".app-icon-hex");
-          if (hexes.length) {
-            var target = hexes[Math.floor(Math.random() * hexes.length)];
-            target.classList.add("flipping");
-            target.addEventListener("animationend", function handler() {
-              target.classList.remove("flipping");
-              target.removeEventListener("animationend", handler);
-            });
-          }
-          scheduleFlip();
-        }, delay);
-      })();
-    }
-  </script>
 </body>
 </html>

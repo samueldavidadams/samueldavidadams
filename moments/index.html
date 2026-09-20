@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments — Samuel David Adams</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page-shell">
+    <a class="back-link" href="../">&larr; Back</a>
+
+    <h1>Moments</h1>
+    <p class="tagline page-intro">Small chapters — click a book to open it.</p>
+
+    <div class="hive">
+      <a class="app-icon moment-book" href="#moment-1" data-moment="moment-1" aria-label="Walking away from the table">
+        <span class="app-icon-hex">
+          <span class="app-icon-glyph">1</span>
+          <span class="app-icon-label">Walking away from the table</span>
+        </span>
+      </a>
+      <a class="app-icon moment-book" href="#moment-2" data-moment="moment-2" aria-label="Untitled">
+        <span class="app-icon-hex">
+          <span class="app-icon-glyph">2</span>
+          <span class="app-icon-label">Untitled</span>
+        </span>
+      </a>
+      <a class="app-icon moment-book" href="#moment-3" data-moment="moment-3" aria-label="Untitled">
+        <span class="app-icon-hex">
+          <span class="app-icon-glyph">3</span>
+          <span class="app-icon-label">Untitled</span>
+        </span>
+      </a>
+    </div>
+
+    <p class="moment-reader-empty" id="momentPrompt">Choose a book to open it.</p>
+    <div class="moment-reader" id="momentReader"></div>
+
+    <template id="moment-1">
+      <p class="moment-title">Walking away from the table</p>
+      <p>I trained for years to understand the body — where it held tension, where it wanted to move. It was good work, and I don't regret a day of it. But the profession itself never grew with me. Same room, same script, same short slots, week after week.</p>
+      <p>I wasn't tired of helping people. I was tired of how small the container had become. Leaving wasn't about chiropractic failing me — it was about realising I'd outgrown the shape of it, and needed somewhere I could actually stretch.</p>
+    </template>
+    <template id="moment-2">
+      <p class="moment-title">Untitled</p>
+      <p>Placeholder chapter — replace with something real. Just here to show how a second book looks on the shelf, and how the reader below switches when you open it.</p>
+    </template>
+    <template id="moment-3">
+      <p class="moment-title">Untitled</p>
+      <p>A third placeholder, to check how three books sit together and how opening one after another feels.</p>
+    </template>
+  </div>
+
+  <script src="/script.js"></script>
+  <script>
+    var books = Array.prototype.slice.call(document.querySelectorAll(".moment-book"));
+    var reader = document.getElementById("momentReader");
+    var prompt = document.getElementById("momentPrompt");
+    var openBook = null;
+
+    function closeBook() {
+      if (!openBook) return;
+      openBook.classList.remove("is-open");
+      openBook = null;
+      reader.classList.remove("is-visible");
+      prompt.hidden = false;
+    }
+
+    function openBookEl(book) {
+      if (openBook) openBook.classList.remove("is-open");
+      openBook = book;
+      book.classList.add("is-open");
+
+      var template = document.getElementById(book.dataset.moment);
+      reader.innerHTML = "";
+      reader.appendChild(template.content.cloneNode(true));
+      reader.classList.add("is-visible");
+      prompt.hidden = true;
+
+      var hex = book.querySelector(".app-icon-hex");
+      hex.classList.add("flipping");
+      hex.addEventListener("animationend", function handler() {
+        hex.classList.remove("flipping");
+        hex.removeEventListener("animationend", handler);
+      });
+    }
+
+    books.forEach(function (book) {
+      book.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (openBook === book) {
+          closeBook();
+        } else {
+          openBookEl(book);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

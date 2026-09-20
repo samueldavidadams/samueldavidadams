@@ -1,3 +1,9 @@
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   margin: 0;
   padding: 2rem 1.5rem;
@@ -165,6 +171,67 @@ article {
   color: #00000099;
 }
 
+.moment {
+  max-width: 55ch;
+  margin: 2.5rem 0 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.moment + .moment {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.moment-title {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: #00000099;
+}
+
+.moment p {
+  margin: 0 0 1rem;
+}
+
+.moment-reader {
+  margin-top: 2.5rem;
+  min-height: 1px;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.moment-reader.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moment-reader {
+    transition: none;
+  }
+}
+
+.moment-reader-empty {
+  margin-top: 2.5rem;
+  color: #00000099;
+}
+
+.app-icon.is-open .app-icon-hex::before {
+  background: transparent;
+}
+
+.app-icon.is-open .app-icon-hex svg,
+.app-icon.is-open .app-icon-hex .app-icon-glyph,
+.app-icon.is-open .app-icon-hex .app-icon-label {
+  color: #fffbf1;
+}
+
+.moment p:last-child {
+  margin-bottom: 0;
+}
+
 .dock-bar {
   position: fixed;
   top: 0;
@@ -308,6 +375,7 @@ article {
   height: var(--hex-h);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: currentColor;
+  backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -385,6 +453,7 @@ article {
   content: "";
   position: absolute;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  backface-visibility: hidden;
   animation: hex-flip 1.2s linear infinite;
 }
 
